@@ -1,8 +1,8 @@
+// pages/api/generate.js
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
-
   const { prompt } = req.body;
 
   try {
@@ -13,7 +13,8 @@ export default async function handler(req, res) {
         headers: {
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           "Content-Type": "application/json",
-          "HTTP-Referer": "https://ai-two-sepia.vercel.app/", // 🔁 IMPORTANT: change to your Vercel URL
+          "HTTP-Referer":
+            "https://ai-git-main-himanshu-patels-projects-a8fec21e.vercel.app",
           "X-Title": "Caption Generator App",
         },
         body: JSON.stringify({
@@ -28,15 +29,23 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("GPT API Error:", data);
-      return res.status(500).json({ error: "GPT API failed." });
+      console.error("❌ OpenRouter Error:", response.status, data);
+      return res
+        .status(500)
+        .json({
+          error: "OpenRouter API failed",
+          code: response.status,
+          details: data,
+        });
     }
 
+    return res.status(200).json({
+      result: data.choices?.[0]?.message?.content,
+    });
+  } catch (err) {
+    console.error("❌ Server Crash:", err);
     return res
-      .status(200)
-      .json({ result: data.choices?.[0]?.message?.content });
-  } catch (error) {
-    console.error("Server Error:", error);
-    return res.status(500).json({ error: "Internal server error." });
+      .status(500)
+      .json({ error: "Internal Server Error", details: err });
   }
 }
