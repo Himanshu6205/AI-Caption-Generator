@@ -1,20 +1,15 @@
 export const generateCaption = async (promptText) => {
   try {
-    const response = await fetch("/api/generate", {
+    const response = await fetch("/api/generate-caption", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: promptText }),
+      body: JSON.stringify({ promptText }),
     });
 
     const data = await response.json();
-
-    if (!response.ok) {
-      return "⚠️ GPT API failed. Try again.";
-    }
-
-    return data.result || "⚠️ No response from GPT.";
+    return data.caption || "⚠️ No caption generated.";
   } catch (error) {
-    console.error("❌ API Error:", error);
-    return "⚠️ GPT API failed. Try again.";
+    console.error("❌ Error:", error);
+    return "⚠️ Failed to fetch caption.";
   }
 };
