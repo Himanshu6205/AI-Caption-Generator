@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://your-vercel-domain.vercel.app", // update this after deploy
+        "HTTP-Referer": "https://ai-two-sepia.vercel.app/", // update this after deploy
         "X-Title": "Caption Generator App",
       },
       body: JSON.stringify({
